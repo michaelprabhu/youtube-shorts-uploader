@@ -1,0 +1,60 @@
+name: Upload Shorts from Google Drive
+
+on:
+  schedule:
+    # Runs once daily at 16:00 UTC (9:00 AM PT / 12:00 PM ET). Adjust anytime.
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+    inputs:
+      max_uploads:
+        description: "Max videos to upload in this run (1-6)"
+        required: false
+        default: "1"
+      default_privacy:
+        description: "Default privacy if not specified in sidecar JSON"
+        required: false
+        type: choice
+        default: "private"
+        options:
+          - private
+          - unlisted
+          - public
+      dry_run:
+        description: "Dry run (list queued videos without uploading)"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: youtube-shorts-uploader
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Upload queued Shorts from Google Drive to YouTube
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          GDRIVE_READY_FOLDER_ID: ${{ secrets.GDRIVE_READY_FOLDER_ID }}
+          GDRIVE_POSTED_FOLDER_ID: ${{ secrets.GDRIVE_POSTED_FOLDER_ID }}
+          MAX_UPLOADS_PER_RUN: ${{ inputs.max_uploads || '1' }}
+          DEFAULT_PRIVACY: ${{ inputs.default_privacy || 'private' }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: python scripts/upload_from_drive.py
