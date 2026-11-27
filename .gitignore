@@ -1,0 +1,12 @@
+.env
+client_secret.json
+token.json
+*.mp4
+*.mov
+*.mkv
+*.webm
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
