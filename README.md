@@ -35,16 +35,17 @@ python scripts/get_refresh_token.py --client-secret client_secret.json
 A browser window opens → sign into your Google/YouTube account and click **Allow**.
 The script prints your 3 secrets (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`).
 
-### Step 3: Add Secrets to Your Private GitHub Repository
-Go to **GitHub Repo → Settings → Secrets and variables → Actions → New repository secret** and add these 5 secrets:
+### Step 3: Add Secrets to Your GitHub Repository
+Go to **GitHub Repo → Settings → Secrets and variables → Actions → New repository secret** and add these secrets:
 
 | Secret Name | Value |
 | :--- | :--- |
 | `GOOGLE_CLIENT_ID` | Printed by `get_refresh_token.py` |
 | `GOOGLE_CLIENT_SECRET` | Printed by `get_refresh_token.py` |
-| `GOOGLE_REFRESH_TOKEN` | Printed by `get_refresh_token.py` |
-| `GDRIVE_READY_FOLDER_ID` | `1Twmal9gscq65NyTlsW4Q3vff4PtMI9Si` *(your `Antigravity/Ready-to-Post` folder)* |
-| `GDRIVE_POSTED_FOLDER_ID` | `1LE7_QaKJ7du3ndWbKxii7p2iZfDCr9eM` *(your `Antigravity/Posted` folder)* |
+| `GOOGLE_REFRESH_TOKEN` | Printed by `get_refresh_token.py` (Google Drive account) |
+| `YOUTUBE_REFRESH_TOKEN` | *(Optional)* Separate refresh token for a YouTube Brand Account |
+| `GDRIVE_READY_FOLDER_ID` | `<your-ready-to-post-folder-id>` *(from the Drive folder URL)* |
+| `GDRIVE_POSTED_FOLDER_ID` | `<your-posted-folder-id>` *(from the Drive folder URL)* |
 
 ### Step 4: Test with a Dry Run
 1. Go to **Actions → Upload Shorts from Google Drive → Run workflow**.
